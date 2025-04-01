@@ -4,11 +4,13 @@ const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
 const routes = require("./src/routes/itemsRouter");
 const database = require("./src/config/database");
+const cors = require("cors");
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 
 // Configuración de Swagger
