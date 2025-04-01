@@ -4,19 +4,23 @@ const swaggerDocument = require("./swagger.json");
 const dotenv = require("dotenv");
 const routes = require("./src/routes/itemsRouter");
 const database = require("./src/config/database");
-const cors = require("cors");
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(
-	cors({
-		origin: "*", // Allow all origins
-		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		allowedHeaders: ["Content-Type", "Authorization"],
-	})
-);
+
+const swaggerDocument = require("./swagger.json");
+
+const isProduction = process.env.NODE_ENV === "production";
+if (isProduction) {
+	swaggerDocument.host = "cse341week3-gtfy.onrender.com";
+	swaggerDocument.schemes = ["https"];
+} else {
+	swaggerDocument.host = `localhost:${PORT}`;
+	swaggerDocument.schemes = ["http"];
+}
+
 app.use(express.json());
 
 // Configuración de Swagger
