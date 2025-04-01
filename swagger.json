@@ -1,0 +1,103 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Items API",
+    "description": "API para gestionar items",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "paths": {
+    "/items": {
+      "get": {
+        "summary": "Obtener todos los items",
+        "description": "Recupera una lista de todos los items",
+        "responses": {
+          "200": {
+            "description": "Lista de items obtenida exitosamente",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {"type": "string"},
+                  "name": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo item",
+        "description": "Crea un nuevo item en la base de datos",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Datos del item a crear",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"}
+            }
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Item creado exitosamente"
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "put": {
+        "summary": "Actualizar un item",
+        "description": "Actualiza un item existente por su ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Datos del item a actualizar",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"}
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item actualizado exitosamente"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar un item",
+        "description": "Elimina un item existente por su ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item eliminado exitosamente"
+          }
+        }
+      }
+    }
+  }
+}
