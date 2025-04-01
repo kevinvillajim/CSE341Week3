@@ -5,9 +5,9 @@
     "description": "API para gestionar items",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341week3-gtfy.onrender.com",
   "basePath": "/api",
-  "schemes": ["https", "http"],
+  "schemes": ["https"],
   "paths": {
     "/items": {
       "get": {
