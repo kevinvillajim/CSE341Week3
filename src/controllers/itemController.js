@@ -1,15 +1,12 @@
 const { ObjectId } = require("mongodb");
 const database = require("../config/database");
 
-// Helper function for data validation
 const validateItemData = (data) => {
   const errors = [];
   
-  // Check if required fields exist
   if (!data.name) errors.push("Item name is required");
   if (!data.description) errors.push("Item description is required");
   
-  // Validate data types
   if (data.price !== undefined && (isNaN(data.price) || data.price < 0)) {
     errors.push("Price must be a positive number");
   }
@@ -33,7 +30,6 @@ exports.getAllItems = async (req, res) => {
 
 exports.createItem = async (req, res) => {
   try {
-    // Validate the request data
     const validationErrors = validateItemData(req.body);
     if (validationErrors.length > 0) {
       return res.status(400).json({ 
@@ -52,7 +48,6 @@ exports.createItem = async (req, res) => {
 
 exports.updateItem = async (req, res) => {
   try {
-    // Validate the request data
     const validationErrors = validateItemData(req.body);
     if (validationErrors.length > 0) {
       return res.status(400).json({ 
@@ -61,7 +56,6 @@ exports.updateItem = async (req, res) => {
       });
     }
     
-    // Validate ID format
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid item ID format" });
     }
@@ -84,7 +78,6 @@ exports.updateItem = async (req, res) => {
 
 exports.deleteItem = async (req, res) => {
   try {
-    // Validate ID format
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid item ID format" });
     }

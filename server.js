@@ -30,15 +30,12 @@ if (isProduction) {
 
 app.use(express.json());
 
-// Configuración de Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.use("/api", routes);
 
-// Conectar a la base de datos e iniciar el servidor
+
 async function startServer() {
   try {
-    // Conectar a la base de datos ANTES de iniciar el servidor
     await database.connect();
 
     app.listen(PORT, () => {
@@ -52,7 +49,6 @@ async function startServer() {
   }
 }
 
-// Manejar cierre de la aplicación
 process.on("SIGINT", async () => {
   await database.close();
   process.exit(0);
