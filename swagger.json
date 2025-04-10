@@ -1,103 +1,388 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "Items API",
-    "description": "API para gestionar items",
-    "version": "1.0.0"
-  },
-  "host": "cse341week3-gtfy.onrender.com",
-  "basePath": "/api",
-  "schemes": ["https"],
-  "paths": {
-    "/items": {
-      "get": {
-        "summary": "Obtener todos los items",
-        "description": "Recupera una lista de todos los items",
-        "responses": {
-          "200": {
-            "description": "Lista de items obtenida exitosamente",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "_id": {"type": "string"},
-                  "name": {"type": "string"}
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Crear un nuevo item",
-        "description": "Crea un nuevo item en la base de datos",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Datos del item a crear",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "name": {"type": "string"}
-            }
-          }
-        }],
-        "responses": {
-          "201": {
-            "description": "Item creado exitosamente"
-          }
-        }
-      }
-    },
-    "/items/{id}": {
-      "put": {
-        "summary": "Actualizar un item",
-        "description": "Actualiza un item existente por su ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Datos del item a actualizar",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {"type": "string"}
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Item actualizado exitosamente"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Eliminar un item",
-        "description": "Elimina un item existente por su ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Item eliminado exitosamente"
-          }
-        }
-      }
-    }
-  }
+	"swagger": "2.0",
+	"info": {
+		"title": "Items and Users API",
+		"description": "API for managing items and users",
+		"version": "1.0.0"
+	},
+	"host": "cse341week3-gtfy.onrender.com",
+	"basePath": "/api",
+	"schemes": ["https"],
+	"paths": {
+		"/items": {
+			"get": {
+				"summary": "Get all items",
+				"description": "Retrieves a list of all items",
+				"responses": {
+					"200": {
+						"description": "List of items successfully obtained",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"_id": {"type": "string"},
+									"name": {"type": "string"},
+									"description": {"type": "string"},
+									"price": {"type": "number"},
+									"quantity": {"type": "integer"},
+									"userId": {"type": "string"}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new item",
+				"description": "Creates a new item in the database",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Data of the item to create",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"required": ["name", "description"],
+							"properties": {
+								"name": {"type": "string"},
+								"description": {"type": "string"},
+								"price": {"type": "number"},
+								"quantity": {"type": "integer"},
+								"userId": {
+									"type": "string",
+									"description": "ID of the owner user (optional)"
+								}
+							}
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Item successfully created"
+					},
+					"400": {
+						"description": "Invalid input data"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			}
+		},
+		"/items/{id}": {
+			"get": {
+				"summary": "Get an item by ID",
+				"description": "Gets the details of a specific item by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the item to get"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Item successfully obtained",
+						"schema": {
+							"type": "object",
+							"properties": {
+								"_id": {"type": "string"},
+								"name": {"type": "string"},
+								"description": {"type": "string"},
+								"price": {"type": "number"},
+								"quantity": {"type": "integer"},
+								"userId": {"type": "string"}
+							}
+						}
+					},
+					"404": {
+						"description": "Item not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"put": {
+				"summary": "Update an item",
+				"description": "Updates an existing item by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the item to update"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Data of the item to update",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"required": ["name", "description"],
+							"properties": {
+								"name": {"type": "string"},
+								"description": {"type": "string"},
+								"price": {"type": "number"},
+								"quantity": {"type": "integer"},
+								"userId": {"type": "string"}
+							}
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Item successfully updated"
+					},
+					"400": {
+						"description": "Invalid input data"
+					},
+					"404": {
+						"description": "Item not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an item",
+				"description": "Deletes an existing item by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the item to delete"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Item successfully deleted"
+					},
+					"404": {
+						"description": "Item not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			}
+		},
+		"/users": {
+			"get": {
+				"summary": "Get all users",
+				"description": "Retrieves a list of all users",
+				"responses": {
+					"200": {
+						"description": "List of users successfully obtained",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"_id": {"type": "string"},
+									"username": {"type": "string"},
+									"email": {"type": "string"}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new user",
+				"description": "Creates a new user in the database",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Data of the user to create",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"required": ["username", "email"],
+							"properties": {
+								"username": {"type": "string"},
+								"email": {"type": "string"},
+								"firstName": {"type": "string"},
+								"lastName": {"type": "string"},
+								"phone": {"type": "string"}
+							}
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "User successfully created"
+					},
+					"400": {
+						"description": "Invalid input data"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"summary": "Get a user by ID",
+				"description": "Gets the details of a specific user by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the user to get"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User successfully obtained",
+						"schema": {
+							"type": "object",
+							"properties": {
+								"_id": {"type": "string"},
+								"username": {"type": "string"},
+								"email": {"type": "string"},
+								"firstName": {"type": "string"},
+								"lastName": {"type": "string"},
+								"phone": {"type": "string"},
+								"createdAt": {"type": "string"}
+							}
+						}
+					},
+					"404": {
+						"description": "User not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"put": {
+				"summary": "Update a user",
+				"description": "Updates an existing user by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the user to update"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Data of the user to update",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"required": ["username", "email"],
+							"properties": {
+								"username": {"type": "string"},
+								"email": {"type": "string"},
+								"firstName": {"type": "string"},
+								"lastName": {"type": "string"},
+								"phone": {"type": "string"}
+							}
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User successfully updated"
+					},
+					"400": {
+						"description": "Invalid input data"
+					},
+					"404": {
+						"description": "User not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete a user",
+				"description": "Deletes an existing user by its ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the user to delete"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User successfully deleted"
+					},
+					"404": {
+						"description": "User not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			}
+		},
+		"/users/{id}/items": {
+			"get": {
+				"summary": "Get a user's items",
+				"description": "Retrieves all items associated with a specific user",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"description": "ID of the user"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User's items list successfully obtained",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"_id": {"type": "string"},
+									"name": {"type": "string"},
+									"description": {"type": "string"},
+									"price": {"type": "number"},
+									"quantity": {"type": "integer"},
+									"userId": {"type": "string"}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User not found"
+					},
+					"500": {
+						"description": "Server error"
+					}
+				}
+			}
+		}
+	}
 }

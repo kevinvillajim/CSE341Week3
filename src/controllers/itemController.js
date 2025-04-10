@@ -14,6 +14,10 @@ const validateItemData = (data) => {
   if (data.quantity !== undefined && (isNaN(data.quantity) || !Number.isInteger(data.quantity) || data.quantity < 0)) {
     errors.push("Quantity must be a positive integer");
   }
+
+   if (data.userId && !ObjectId.isValid(data.userId)) {
+			errors.push("Invalid user ID format");
+		}
   
   return errors;
 };
@@ -28,6 +32,25 @@ exports.getAllItems = async (req, res) => {
   }
 };
 
+exports.getItemById = async (req, res) => {
+	try {
+		if (!ObjectId.isValid(req.params.id)) {
+			return res.status(400).json({message: "Invalid item ID format"});
+		}
+
+		const collection = database.getCollection("items");
+		const item = await collection.findOne({_id: new ObjectId(req.params.id)});
+
+		if (!item) {
+			return res.status(404).json({message: "Item not found"});
+		}
+
+		res.json(item);
+	} catch (err) {
+		res.status(500).json({message: err.message});
+	}
+};
+
 exports.createItem = async (req, res) => {
   try {
     const validationErrors = validateItemData(req.body);
@@ -37,9 +60,22 @@ exports.createItem = async (req, res) => {
         errors: validationErrors 
       });
     }
+
+    if (req.body.userId) {
+      const usersCollection = database.getCollection("users");
+      const userExists = await usersCollection.findOne({ _id: new ObjectId(req.body.userId) });
+      
+      if (!userExists) {
+        return res.status(400).json({ message: "Specified user does not exist" });
+      }
+    }
     
     const collection = database.getCollection("items");
-    const result = await collection.insertOne(req.body);
+    const result = await collection.insertOne({
+      ...req.body,
+      createdAt: new Date()
+    });
+    
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -59,6 +95,17 @@ exports.updateItem = async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid item ID format" });
     }
+
+    if (req.body.userId) {
+			const usersCollection = database.getCollection("users");
+			const userExists = await usersCollection.findOne({
+				_id: new ObjectId(req.body.userId),
+			});
+
+			if (!userExists) {
+				return res.status(400).json({message: "Specified user does not exist"});
+			}
+		}
     
     const collection = database.getCollection("items");
     const result = await collection.updateOne(
