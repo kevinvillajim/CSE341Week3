@@ -8,9 +8,20 @@
 	"host": "cse341week3-gtfy.onrender.com",
 	"basePath": "/api",
 	"schemes": ["https"],
+	"tags": [
+		{
+			"name": "Items",
+			"description": "Operations related to items management"
+		},
+		{
+			"name": "Users",
+			"description": "Operations related to users management"
+		}
+	],
 	"paths": {
 		"/items": {
 			"get": {
+				"tags": ["Items"],
 				"summary": "Get all items",
 				"description": "Retrieves a list of all items",
 				"responses": {
@@ -37,6 +48,7 @@
 				}
 			},
 			"post": {
+				"tags": ["Items"],
 				"summary": "Create a new item",
 				"description": "Creates a new item in the database",
 				"parameters": [
@@ -76,6 +88,7 @@
 		},
 		"/items/{id}": {
 			"get": {
+				"tags": ["Items"],
 				"summary": "Get an item by ID",
 				"description": "Gets the details of a specific item by its ID",
 				"parameters": [
@@ -111,6 +124,7 @@
 				}
 			},
 			"put": {
+				"tags": ["Items"],
 				"summary": "Update an item",
 				"description": "Updates an existing item by its ID",
 				"parameters": [
@@ -155,6 +169,7 @@
 				}
 			},
 			"delete": {
+				"tags": ["Items"],
 				"summary": "Delete an item",
 				"description": "Deletes an existing item by its ID",
 				"parameters": [
@@ -181,6 +196,7 @@
 		},
 		"/users": {
 			"get": {
+				"tags": ["Users"],
 				"summary": "Get all users",
 				"description": "Retrieves a list of all users",
 				"responses": {
@@ -204,6 +220,7 @@
 				}
 			},
 			"post": {
+				"tags": ["Users"],
 				"summary": "Create a new user",
 				"description": "Creates a new user in the database",
 				"parameters": [
@@ -240,6 +257,7 @@
 		},
 		"/users/{id}": {
 			"get": {
+				"tags": ["Users"],
 				"summary": "Get a user by ID",
 				"description": "Gets the details of a specific user by its ID",
 				"parameters": [
@@ -276,6 +294,7 @@
 				}
 			},
 			"put": {
+				"tags": ["Users"],
 				"summary": "Update a user",
 				"description": "Updates an existing user by its ID",
 				"parameters": [
@@ -320,6 +339,7 @@
 				}
 			},
 			"delete": {
+				"tags": ["Users"],
 				"summary": "Delete a user",
 				"description": "Deletes an existing user by its ID",
 				"parameters": [
@@ -346,6 +366,7 @@
 		},
 		"/users/{id}/items": {
 			"get": {
+				"tags": ["Users"],
 				"summary": "Get a user's items",
 				"description": "Retrieves all items associated with a specific user",
 				"parameters": [
